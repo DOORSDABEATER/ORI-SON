@@ -14,29 +14,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: orison
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 25
-        uses: actions/setup-java@v4
+      - name: Set up Java 25
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '25'
-          cache: gradle
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
 
       - name: Build ORISON
         run: |
-          chmod +x gradlew
-          ./gradlew clean build
+          gradle build --no-daemon
 
-      - name: Upload ORISON JAR
+      - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
-          name: ORISON-Plugin-1.0
-          path: build/libs/*.jar
+          name: ORISON-Plugin
+          path: orison/build/libs/*.jar
           if-no-files-found: error
           
